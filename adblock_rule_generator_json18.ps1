@@ -355,7 +355,7 @@ $urlList = @(
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/privacy/privacy_xfire.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/spam/spam_forums.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/spam/spam_spamhaus.ipset",
-"https: //github.com/Aetherinox/blocklists/raw/refs/heads/main/blocklists/transmission/blocklist.ipset",
+"https://github.com/Aetherinox/blocklists/raw/refs/heads/main/blocklists/transmission/blocklist.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/highrisk.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/master.ipset"
 

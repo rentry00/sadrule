@@ -7,10 +7,10 @@
 
 # 定义广告过滤器URL列表
 $urlList = @(
-#"https://www.bromite.org/filters/filters.dat",
-#"https://raw.githubusercontent.com/Metrokoto/filterlists/refs/heads/main/combined_annoyances_without_element_hiding.txt",
-#"https://github.com/bitwire-it/ipblocklist/raw/refs/heads/main/ip-list.txt",
-#"https://github.com/TimmiORG/ip-blacklist/raw/refs/heads/main/all.list.use",
+"https://www.bromite.org/filters/filters.dat",
+"https://raw.githubusercontent.com/Metrokoto/filterlists/refs/heads/main/combined_annoyances_without_element_hiding.txt",
+"https://github.com/bitwire-it/ipblocklist/raw/refs/heads/main/ip-list.txt",
+"https://github.com/TimmiORG/ip-blacklist/raw/refs/heads/main/all.list.use",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/continent_africa.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/continent_antartica.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/continent_asia.ipset",
@@ -26,8 +26,8 @@ $urlList = @(
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/country_angola.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/country_anguilla.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/country_antarctica.ipset",
-#"https://raw.githubusercontent.com/sefinek/known-bots-ip-whitelist/main/lists/all-safe-ips.txt",
-#"https://github.com/stamparm/ipsum/raw/refs/heads/master/ipsum.txt",
+"https://raw.githubusercontent.com/sefinek/known-bots-ip-whitelist/main/lists/all-safe-ips.txt",
+"https://github.com/stamparm/ipsum/raw/refs/heads/master/ipsum.txt",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/continent_africa.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/continent_antartica.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/continent_asia.ipset",
@@ -352,7 +352,20 @@ $excludedDomains = [System.Collections.Generic.HashSet[string]]::new()
 $webClient = New-Object System.Net.WebClient
 $webClient.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
 
-
+# DNS规范验证函数
+function Is-ValidDNSDomain($domain) {
+    if ($domain.Length -gt 253) { return $false }
+    $labels = $domain -split "\."
+    foreach ($label in $labels) {
+        if ($label.Length -eq 0 -or $label.Length -gt 63) { return $false }
+        if ($label -notmatch "^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$") {
+            return $false
+        }
+    }
+    $tld = $labels[-1]
+    if ($tld -notmatch "^[a-zA-Z]{2,}$") { return $false }
+    return $true
+}
 
 foreach ($url in $urlList) {
     Write-Host "正在处理: $url"
@@ -375,47 +388,47 @@ foreach ($url in $urlList) {
             else {
                 # 匹配 Adblock/Easylist 格式的规则
                 if ($line -match '^\|\|([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\^$') {
-                    $domain = $Matches[1]
-                    $uniqueRules.Add($domain) | Out-Null
+                   # $domain = $Matches[1]
+                    # $uniqueRules.Add($domain) | Out-Null
                 }
                 # 匹配 Hosts 文件格式的 IPv4 规则
                 elseif ($line -match '^(0\.0\.0\.0|127\.0\.0\.1)\s+([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$') {
-                    $domain = $Matches[2]
-                    $uniqueRules.Add($domain) | Out-Null
+                   # $domain = $Matches[2]
+                   # $uniqueRules.Add($domain) | Out-Null
                 }
                 # 匹配 Hosts 文件格式的 IPv6 规则（以 ::1 或 :: 开头）
                 elseif ($line -match '^::(1)?\s+([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$') {
-                    $domain = $Matches[2]
-                    $uniqueRules.Add($domain) | Out-Null
+                    #$domain = $Matches[2]
+                    #$uniqueRules.Add($domain) | Out-Null
                 }
                 # 匹配 Dnsmasq address=/域名/格式的规则
                 elseif ($line -match '^address=/([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/$') {
-                    $domain = $Matches[1]
-                    $uniqueRules.Add($domain) | Out-Null
+                    #$domain = $Matches[1]
+                    #$uniqueRules.Add($domain) | Out-Null
                 }
                 # 匹配 Dnsmasq server=/域名/的规则
                 elseif ($line -match '^server=/([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/$') {
-                    $domain = $Matches[1]
-                    $uniqueRules.Add($domain) | Out-Null
+                    #$domain = $Matches[1]
+                    #$uniqueRules.Add($domain) | Out-Null
                 }
                 # 匹配通配符规则
                 elseif ($line -match '^\|\|([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\^$') {
-                    $domain = $Matches[1]
-                    $uniqueRules.Add($domain) | Out-Null
+                    #$domain = $Matches[1]
+                    #$uniqueRules.Add($domain) | Out-Null
                 }
                 # 处理纯域名行
                 elseif ($line -match '^([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$') {
-                    $domain = $Matches[1]
-                    $uniqueRules.Add($domain) | Out-Null
+                   # $domain = $Matches[1]
+                  #  $uniqueRules.Add($domain) | Out-Null
                 }
                 # 处理CIDR
                 elseif ($line -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}/\d{1,3}\s*$') {
-                    $domain = $Matches[1]
+                    $domain = $line
                     $uniqueRules.Add($domain) | Out-Null
                 }
                 # 处理CIDR
                 elseif ($line -match '^\s*([0-9a-fA-F:]+)+/\d{1,3}\s*$') {
-                    $domain = $Matches[1]
+                    $domain = $line
                     $uniqueRules.Add($domain) | Out-Null
                 }
             }
@@ -432,12 +445,13 @@ $validRules = [System.Collections.Generic.HashSet[string]]::new()
 $validExcludedDomains = [System.Collections.Generic.HashSet[string]]::new()
 
 foreach ($domain in $uniqueRules) {
-    
-        $validRules.Add($domain) | Out-Null
+     $validRules.Add($domain) | Out-Null
     
 }
 
-
+foreach ($domain in $excludedDomains) {
+    $validExcludedDomains.Add($domain) | Out-Null
+}
 
 # 排除所有白名单规则中的域名
 $finalRules = $validRules | Where-Object { -not $validExcludedDomains.Contains($_) }

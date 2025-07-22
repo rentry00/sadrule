@@ -7,10 +7,10 @@
 
 # 定义广告过滤器URL列表
 $urlList = @(
-"https://www.bromite.org/filters/filters.dat",
-"https://raw.githubusercontent.com/Metrokoto/filterlists/refs/heads/main/combined_annoyances_without_element_hiding.txt",
-"https://github.com/bitwire-it/ipblocklist/raw/refs/heads/main/ip-list.txt",
-"https://github.com/TimmiORG/ip-blacklist/raw/refs/heads/main/all.list.use",
+#"https://www.bromite.org/filters/filters.dat",
+#"https://raw.githubusercontent.com/Metrokoto/filterlists/refs/heads/main/combined_annoyances_without_element_hiding.txt",
+#"https://github.com/bitwire-it/ipblocklist/raw/refs/heads/main/ip-list.txt",
+#"https://github.com/TimmiORG/ip-blacklist/raw/refs/heads/main/all.list.use",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/continent_africa.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/continent_antartica.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/continent_asia.ipset",
@@ -26,8 +26,8 @@ $urlList = @(
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/country_angola.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/country_anguilla.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/country_antarctica.ipset",
-"https://raw.githubusercontent.com/sefinek/known-bots-ip-whitelist/main/lists/all-safe-ips.txt",
-"https://github.com/stamparm/ipsum/raw/refs/heads/master/ipsum.txt",
+#"https://raw.githubusercontent.com/sefinek/known-bots-ip-whitelist/main/lists/all-safe-ips.txt",
+#"https://github.com/stamparm/ipsum/raw/refs/heads/master/ipsum.txt",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/continent_africa.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/continent_antartica.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/continent_asia.ipset",

@@ -422,7 +422,12 @@ foreach ($url in $urlList) {
                     $uniqueRules.Add($domain) | Out-Null
                 }
                 # 处理CIDR
-                elseif ($line -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}/\d{1,3}\s*$' -or -match '^\s*([0-9a-fA-F:]+)+/\d{1,3}\s*$') {
+                elseif ($line -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}/\d{1,3}\s*$') {
+                    $domain = $Matches[1]
+                    $uniqueRules.Add($domain) | Out-Null
+                }
+                # 处理CIDR
+                elseif ($line -match '^\s*([0-9a-fA-F:]+)+/\d{1,3}\s*$') {
                     $domain = $Matches[1]
                     $uniqueRules.Add($domain) | Out-Null
                 }

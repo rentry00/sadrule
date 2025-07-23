@@ -428,7 +428,7 @@ foreach ($url in $urlList) {
                 elseif ($line -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}\s*$') {
                     
                     $domain = $line + "/" + $number
-                    Write-Host "$domain"
+                   # Write-Host "$domain"
                     $uniqueRules.Add($domain) | Out-Null
                 }
                 # 处理IPv6
@@ -440,7 +440,7 @@ foreach ($url in $urlList) {
                 elseif ($line -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}/\d{1,3}\s*$') {
                     
                     $domain = $line 
-                    Write-Host "$domain"
+                    #Write-Host "$domain"
                     $uniqueRules.Add($domain) | Out-Null
                 }
                 # 处理CIDR

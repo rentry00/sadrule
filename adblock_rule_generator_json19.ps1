@@ -337,7 +337,10 @@ $urlList = @(
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/spam/spam_spamhaus.ipset",
 "https://github.com/Aetherinox/blocklists/raw/refs/heads/main/blocklists/transmission/blocklist.ipset",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/highrisk.ipset",
-"https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/master.ipset"
+"https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/master.ipset",
+"https://github.com/borestad/blocklist-abuseipdb/raw/refs/heads/main/abuseipdb-s100-all.ipv4",
+"https://github.com/ashleykleynhans/ipset/raw/refs/heads/main/ipv4.csv",
+"https://raw.githubusercontent.com/tn3w/IPSet/refs/heads/master/iplist.txt"
 
 
 )
@@ -390,45 +393,12 @@ foreach ($url in $urlList) {
             }
             else {
                 # 匹配 Adblock/Easylist 格式的规则
-                if ($line -match '^\|\|([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\^$') {
-                    #$domain = $Matches[1]
-                   # $uniqueRules.Add($domain) | Out-Null
-                }
-                # 匹配 Hosts 文件格式的 IPv4 规则
-                elseif ($line -match '^(0\.0\.0\.0|127\.0\.0\.1)\s+([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$') {
-                   # $domain = $Matches[2]
-                    #$uniqueRules.Add($domain) | Out-Null
-                }
-                # 匹配 Hosts 文件格式的 IPv6 规则（以 ::1 或 :: 开头）
-                elseif ($line -match '^::(1)?\s+([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$') {
-                    #$domain = $Matches[2]
-                   # $uniqueRules.Add($domain) | Out-Null
-                }
-                # 匹配 Dnsmasq address=/域名/格式的规则
-                elseif ($line -match '^address=/([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/$') {
-                    #$domain = $Matches[1]
-                    #$uniqueRules.Add($domain) | Out-Null
-                }
-                # 匹配 Dnsmasq server=/域名/的规则
-                elseif ($line -match '^server=/([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/$') {
-                    #$domain = $Matches[1]
-                    #$uniqueRules.Add($domain) | Out-Null
-                }
-                # 匹配通配符规则
-                elseif ($line -match '^\|\|([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\^$') {
-                   # $domain = $Matches[1]
-                   # $uniqueRules.Add($domain) | Out-Null
-                }
-                # 处理纯域名行
-                elseif ($line -match '^([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$') {
-                   # $domain = $Matches[1]
-                    #$uniqueRules.Add($domain) | Out-Null
-                }
+               
                 # 处理ipv4
-                elseif ($line -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}\s*$') {
+                if ($line -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}\s*$') {
                     
                     $domain = $line + "/" + $number
-                   # Write-Host "$domain"
+                    #Write-Host "$domain"
                     $uniqueRules.Add($domain) | Out-Null
                 }
                 # 处理IPv6

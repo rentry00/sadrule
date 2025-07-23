@@ -8,8 +8,8 @@
 # 定义广告过滤器URL列表
 $urlList = @(
 
-"https://www.bromite.org/filters/filters.dat",
-"https://raw.githubusercontent.com/Metrokoto/filterlists/refs/heads/main/combined_annoyances_without_element_hiding.txt",
+#"https://www.bromite.org/filters/filters.dat",
+#"https://raw.githubusercontent.com/Metrokoto/filterlists/refs/heads/main/combined_annoyances_without_element_hiding.txt",
 "https://github.com/bitwire-it/ipblocklist/raw/refs/heads/main/ip-list.txt",
 "https://github.com/TimmiORG/ip-blacklist/raw/refs/heads/main/all.list.use",
 "https://raw.githubusercontent.com/Aetherinox/blocklists/refs/heads/main/blocklists/country/geolite/continent_africa.ipset",

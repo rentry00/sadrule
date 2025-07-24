@@ -380,11 +380,14 @@ foreach ($url in $urlList) {
         $content = $webClient.DownloadString($url)
         $lines = $content -split "`n"
         
-        foreach ($line in $lines) {
-            # 直接处理以 @@ 开头的规则，提取域名并加入白名单
-             # Write-Host "$line"
-            if ($line.StartsWith('@@')) {
-                $domains = $line -replace '^@@', '' -split '[^\w.-]+'
+        
+        $uniqueRules = Get-Content $lines | Where-Object {
+    $_ -notmatch '^\s*$' -and  # 忽略空行
+    $_ -notmatch '^\s*#' -and  # 忽略注释行
+} | ForEach-Object { 
+ $_.Trim()
+ if ($_.StartsWith('@@')) {
+                $domains = $_ -replace '^@@', '' -split '[^\w.-]+'
                 foreach ($domain in $domains) {
                     if (-not [string]::IsNullOrWhiteSpace($domain) -and $domain -match '[\w-]+(\.[[\w-]+)+') {
                         $excludedDomains.Add($domain.Trim()) | Out-Null
@@ -395,32 +398,36 @@ foreach ($url in $urlList) {
                 # 匹配 Adblock/Easylist 格式的规则
                
                 # 处理ipv4
-                if ($line -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}\s*$') {
+                if ($_ -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}\s*$') {
                     
-                    $domain = $line + "/" + $number
+                    $domain = $Matches[0]  + "/" + $number
                     #Write-Host "$domain"
                     $uniqueRules.Add($domain) | Out-Null
                 }
                 # 处理IPv6
-                elseif ($line -match '\s*([0-9a-fA-F:]+)+\s*$') {
-                    $domain = $line + "/" + $number
+                elseif ($_ -match '\s*([0-9a-fA-F:]+)+\s*$') {
+                    $domain = $Matches[0]  + "/" + $number
                     $uniqueRules.Add($domain) | Out-Null
                 }
                 # 处理CIDR
-                elseif ($line -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}/\d{1,3}\s*$') {
+                elseif ($_ -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}/\d{1,3}\s*$') {
                     
-                    $domain = $line 
+                    $domain =$Matches[0]  
                     #Write-Host "$domain"
                     $uniqueRules.Add($domain) | Out-Null
                 }
                 # 处理CIDR
-                elseif ($line -match '^\s*([0-9a-fA-F:]+)+/\d{1,3}\s*$') {
-                    $domain = $line
+                elseif ($_ -match '^\s*([0-9a-fA-F:]+)+/\d{1,3}\s*$') {
+                    $domain = $Matches[0] 
                     $uniqueRules.Add($domain) | Out-Null
                 }
+
+}
+        
+        
+        
             }
         }
-    }
     catch {
         Write-Host "处理 $url 时出错: $_"
         Add-Content -Path $logFilePath -Value "处理 $url 时出错: $_"

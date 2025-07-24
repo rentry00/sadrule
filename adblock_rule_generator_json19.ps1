@@ -381,53 +381,15 @@ foreach ($url in $urlList) {
         $lines = $content -split "`n"
         
         
-        $uniqueRules = Get-Content $lines | Where-Object {
+        $uniqueRules = $lines | Where-Object {
     $_ -notmatch '^\s*$' -and  # 忽略空行
     $_ -notmatch '^\s*#' -and  # 忽略注释行
-} | ForEach-Object { 
- $_.Trim()
- if ($_.StartsWith('@@')) {
-                $domains = $_ -replace '^@@', '' -split '[^\w.-]+'
-                foreach ($domain in $domains) {
-                    if (-not [string]::IsNullOrWhiteSpace($domain) -and $domain -match '[\w-]+(\.[[\w-]+)+') {
-                        $excludedDomains.Add($domain.Trim()) | Out-Null
-                    }
-                }
-            }
-            else {
-                # 匹配 Adblock/Easylist 格式的规则
-               
-                # 处理ipv4
-                if ($_ -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}\s*$') {
-                    
-                    $domain = $Matches[0]  + "/" + $number
-                    #Write-Host "$domain"
-                    $uniqueRules.Add($domain) | Out-Null
-                }
-                # 处理IPv6
-                elseif ($_ -match '\s*([0-9a-fA-F:]+)+\s*$') {
-                    $domain = $Matches[0]  + "/" + $number
-                    $uniqueRules.Add($domain) | Out-Null
-                }
-                # 处理CIDR
-                elseif ($_ -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}/\d{1,3}\s*$') {
-                    
-                    $domain =$Matches[0]  
-                    #Write-Host "$domain"
-                    $uniqueRules.Add($domain) | Out-Null
-                }
-                # 处理CIDR
-                elseif ($_ -match '^\s*([0-9a-fA-F:]+)+/\d{1,3}\s*$') {
-                    $domain = $Matches[0] 
-                    $uniqueRules.Add($domain) | Out-Null
-                }
-
-}
+    ($_+ "/" + $number -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}\s*$' -or $_+ "/" + $number -match '\s*([0-9a-fA-F:]+)+\s*$' -or $_ -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}/\d{1,3}\s*$' -or  # IPv4格式验证
+    $_ -match '^\s*([0-9a-fA-F:]+)+/\d{1,3}\s*$')  # IPv6格式验证
+} | ForEach-Object { $_.Trim() }
         
         
-        
-            }
-        }
+    }
     catch {
         Write-Host "处理 $url 时出错: $_"
         Add-Content -Path $logFilePath -Value "处理 $url 时出错: $_"

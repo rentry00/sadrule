@@ -382,10 +382,30 @@ foreach ($url in $urlList) {
         
         
         $uniqueRules = $lines | Where-Object {
-    $_ -notmatch '^\s*$' -and  # 忽略空行
-    $_ -notmatch '^\s*#' -and  # 忽略注释行
-    ($_+ "/" + $number -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}\s*$' -or $_+ "/" + $number -match '\s*([0-9a-fA-F:]+)+\s*$' -or $_ -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}/\d{1,3}\s*$' -or  # IPv4格式验证
-    $_ -match '^\s*([0-9a-fA-F:]+)+/\d{1,3}\s*$')  # IPv6格式验证
+      # 处理ipv4
+                if ($_ -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}\s*$') {
+                    
+                    $domain = $_ + "/" + $number
+                    #Write-Host "$domain"
+                    $uniqueRules.Add($domain) | Out-Null
+                }
+                # 处理IPv6
+                elseif ($_ -match '\s*([0-9a-fA-F:]+)+\s*$') {
+                    $domain = $_ + "/" + $number
+                    $uniqueRules.Add($domain) | Out-Null
+                }
+                # 处理CIDR
+                elseif ($_ -match '^\s*([0-9]{1,3}\.){3}[0-9]{1,3}/\d{1,3}\s*$') {
+                    
+                    $domain = $_ 
+                    #Write-Host "$domain"
+                    $uniqueRules.Add($domain) | Out-Null
+                }
+                # 处理CIDR
+                elseif ($_ -match '^\s*([0-9a-fA-F:]+)+/\d{1,3}\s*$') {
+                    $domain = $_
+                    $uniqueRules.Add($domain) | Out-Null
+                }
 } | ForEach-Object { $_.Trim() }
         
         
